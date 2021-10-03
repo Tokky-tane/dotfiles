@@ -1,0 +1,63 @@
+[include]
+  path = .gitconfig.user
+
+[alias]
+  a    = add
+  aa   = add .
+  b    = branch
+  ba   = branch --all
+  bm   = branch --merged
+  com  = commit -m
+  coa  = commit --amend
+  coan = commit --amend --no-edit
+  ch   = checkout
+  chb  = checkout -b
+  i    = init
+  cl   = clone
+  st   = status --short --branch --show-stash
+  l    = log --oneline --graph
+  ln   = log --oneline --graph --name-status
+  d    = diff
+  dw   = diff --ignore-all-space
+  ds   = diff --staged
+  dsw  = diff --staged --ignore-all-space
+  r    = rebase
+  ri   = rebase -i
+  rc   = rebase --continue
+  ra   = rebase --abort
+  ss   = stash save
+  ssk  = stash save --keep-index
+  sp   = stash pop
+  sa   = stash apply
+  f    = fetch
+  p    = pull
+
+[core]
+  excludesfile = /Users/t_nakahara/.gitignore_global
+
+[pager]
+  diff = delta
+  log = delta
+  reflog = delta
+  show = delta
+
+[interactive]
+  diffFilter = delta --color-only --features=interactive
+
+[delta]
+  features = decorations line-numbers
+  syntax-theme = Dracula
+
+[delta "interactive"]
+  keep-plus-minus-markers = false
+
+[delta "decorations"]
+  commit-decoration-style = blue ol
+  commit-style = raw
+  file-style = omit
+  hunk-header-decoration-style = blue box
+  hunk-header-file-style = red
+  hunk-header-line-number-style = "#067a00"
+  hunk-header-style = file line-number syntax
+[fetch]
+  prune = true
