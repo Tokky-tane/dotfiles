@@ -127,3 +127,4 @@ function peco-history-selection() {
 }
 zle -N peco-history-selection
 bindkey '^R' peco-history-selection
+export PATH=$PATH:/opt/WebDriver/bin
