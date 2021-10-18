@@ -97,6 +97,7 @@ zstyle ':znap:*' repos-dir ~/.zshplugins
 source ~/Documents/zsh-snap/znap.zsh
 # znap source zsh-autocomplete
 
+export HISTFILE=$HOME/.zsh_history
 export SAVEHIST=100000
 export HISTSIZE=100000
 setopt HIST_IGNORE_ALL_DUPS
