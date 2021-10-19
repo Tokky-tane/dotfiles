@@ -6,6 +6,16 @@ autoload -Uz compinit && compinit
 autoload -Uz promptinit && promptinit
 
 autoload -U +X bashcompinit && bashcompinit
+
+autoload -Uz vcs_info
+precmd_vcs_info() { vcs_info }
+precmd_functions+=( precmd_vcs_info )
+setopt prompt_subst
+# PROMPT=\$vcs_info_msg_0_'%# '
+zstyle ':vcs_info:git:*' formats '(%F{green}%b%f)-(%c%u)'
+zstyle ':vcs_info:git:*' check-for-changes true
+RPROMPT=\$vcs_info_msg_0_
+
 export AWS_PROFILE=ga-main
 export AWS_REGION=ap-northeast-1
 
