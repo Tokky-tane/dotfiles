@@ -52,6 +52,12 @@ alias tfss='terraform state show'
 # aws_sso_auth
 alias aa='aws_sso_ruby auth'
 alias aap='aws_sso_ruby auth -p'
+function aws_login () {
+  export AWS_PROFILE=$1
+  aws_sso_ruby auth -p $1
+}
+export -f aws_login >/dev/null
+alias al='aws_login'
 
 # circleci
 alias ccv='circleci config validate'
