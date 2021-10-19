@@ -122,7 +122,7 @@ setopt HIST_REDUCE_BLANKS
 setopt HIST_IGNORE_DUPS # 重複した履歴を無視
 setopt SHARE_HISTORY
 
-export LESS='R'
+export LESS='-R -# 2'
 # -, _, /, =, . を削除する
 export WORDCHARS=$(echo $WORDCHARS | sed -e 's/-//' -e 's/\///' -e 's/_//' -e 's/=//' -e 's/\.//')
 prompt fade blue
