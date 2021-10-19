@@ -1,4 +1,5 @@
 eval "$(rbenv init -)"
+export PATH="$PATH:$HOME/Documents/myscripts"
 
 # https://github.com/asdf-vm/asdf/issues/266
 autoload -Uz compinit && compinit
