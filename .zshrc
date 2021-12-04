@@ -110,10 +110,6 @@ if [ -f '/Users/t_nakahara/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/t_nakahara/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/t_nakahara/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
 
-zstyle ':znap:*' repos-dir ~/.zshplugins
-source ~/Documents/zsh-snap/znap.zsh
-# znap source zsh-autocomplete
-
 export HISTFILE=$HOME/.zsh_history
 export SAVEHIST=100000
 export HISTSIZE=100000
