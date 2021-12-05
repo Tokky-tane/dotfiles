@@ -99,6 +99,12 @@ alias gssk='git ssk'
 alias gsp='git sp'
 alias gsa='git sa'
 
+alias dcb='docker compose build'
+alias dce='docker compose exec'
+alias dcr='docker compose run'
+alias dcu='docker compose up'
+alias dcub='docker compose up --build'
+
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 # Added by serverless binary installer
