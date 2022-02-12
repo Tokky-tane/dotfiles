@@ -7,7 +7,9 @@
   b    = branch
   ba   = branch --all
   bm   = branch --merged
-  com  = commit -m
+  co   = commit
+  cof  = commit --fixup
+  com  = commit --message
   coa  = commit --amend
   coan = commit --amend --no-edit
   ch   = checkout
