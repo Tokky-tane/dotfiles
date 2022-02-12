@@ -1,31 +1,69 @@
-eval "$(rbenv init -)"
-export PATH="$PATH:$HOME/Documents/myscripts"
 
 # https://github.com/asdf-vm/asdf/issues/266
 autoload -Uz compinit && compinit
-
 autoload -Uz promptinit && promptinit
-
 autoload -U +X bashcompinit && bashcompinit
-
-autoload -Uz vcs_info
-precmd_vcs_info() { vcs_info }
-precmd_functions+=( precmd_vcs_info )
-setopt prompt_subst
-zstyle ':vcs_info:*' enable git
-# PROMPT=\$vcs_info_msg_0_'%# '
-zstyle ':vcs_info:git:*' formats '(%F{green}%b%f)-(%c%u)'
-zstyle ':vcs_info:git:*' check-for-changes true
-RPROMPT=\$vcs_info_msg_0_
-
-export AWS_PROFILE=ga-main
-export AWS_REGION=ap-northeast-1
 
 complete -C '/usr/local/bin/aws_completer' aws # https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-configure-completion.html
 complete -o nospace -C /usr/local/Cellar/tfenv/2.2.2/versions/0.12.28/terraform terraform
 complete -o nospace -C /usr/local/Cellar/tfenv/2.2.2/versions/0.13.3/terraform terraform
 complete -o nospace -C /usr/local/Cellar/tfenv/2.2.0/versions/0.15.0/terraform terraform
 complete -o nospace -C /usr/local/Cellar/tfenv/2.2.2/versions/0.14.10/terraform terraform
+
+export HISTFILE=$HOME/.zsh_history
+export SAVEHIST=100000
+export HISTSIZE=100000
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_REDUCE_BLANKS
+setopt HIST_IGNORE_DUPS # 重複した履歴を無視
+setopt SHARE_HISTORY
+
+export LESS='-R -# 2'
+# -, _, /, =, . を削除する
+export WORDCHARS=$(echo $WORDCHARS | sed -e 's/[-_=\.\/]//')
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/t_nakahara/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/t_nakahara/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/t_nakahara/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/t_nakahara/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+eval "$(rbenv init -)"
+
+autoload -Uz vcs_info
+precmd_vcs_info() { vcs_info }
+precmd_functions+=( precmd_vcs_info )
+setopt prompt_subst
+zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:git:*' formats '(%F{green}%b%f)-(%c%u)'
+zstyle ':vcs_info:git:*' check-for-changes true
+RPROMPT=\$vcs_info_msg_0_
+
+prompt fade blue
+
+export AWS_PROFILE=ga-main
+export AWS_REGION=ap-northeast-1
+
+DISABLE_AUTO_TITLE="true"
+iterm_tab_title() {
+  echo -ne "\e]0;${PWD#*${USER}}\a"
+}
+add-zsh-hook chpwd iterm_tab_title
+
+# peco history
+# https://qiita.com/reireias/items/fd96d67ccf1fdffb24ed
+function peco-history-selection() {
+  BUFFER=$(history -n 1 | tac | awk '!a[$0]++' | peco)
+  CURSOR=$#BUFFER
+  zle reset-prompt
+}
+zle -N peco-history-selection
+bindkey '^R' peco-history-selection
+export PATH="/usr/local/sbin:$PATH"
+export PATH=$PATH:/opt/WebDriver/bin
+export PATH="$PATH:$HOME/Documents/myscripts"
+export PATH="$HOME/.serverless/bin:$PATH"
+[ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
 
 # 現在の入力から始まるコマンドの履歴を表示するようにする
 [[ -n "${key[PageUp]}" ]] && bindkey "${key[PageUp]}" history-beginning-search-backward
@@ -58,7 +96,7 @@ function aws_login () {
   export AWS_PROFILE=$1
   aws_sso_ruby auth -p $1
 }
-export -f aws_login >/dev/null
+export aws_login >/dev/null
 alias al='aws_login'
 
 # circleci
@@ -105,48 +143,3 @@ alias dce='docker compose exec'
 alias dcr='docker compose run'
 alias dcu='docker compose up'
 alias dcub='docker compose up --build'
-
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-
-# Added by serverless binary installer
-export PATH="$HOME/.serverless/bin:$PATH"
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/t_nakahara/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/t_nakahara/Downloads/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/t_nakahara/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/t_nakahara/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
-
-export HISTFILE=$HOME/.zsh_history
-export SAVEHIST=100000
-export HISTSIZE=100000
-setopt HIST_IGNORE_ALL_DUPS
-setopt HIST_REDUCE_BLANKS
-setopt HIST_IGNORE_DUPS # 重複した履歴を無視
-setopt SHARE_HISTORY
-
-export LESS='-R -# 2'
-# -, _, /, =, . を削除する
-export WORDCHARS=$(echo $WORDCHARS | sed -e 's/-//' -e 's/\///' -e 's/_//' -e 's/=//' -e 's/\.//')
-prompt fade blue
-# defaults write -g CGFontRenderingFontSmoothingDisabled -bool NO
-# defaults -currentHost write -globalDomain AppleFontSmoothing -int 1
-
-DISABLE_AUTO_TITLE="true"
-iterm_tab_title() {
-  echo -ne "\e]0;${PWD#*${USER}}\a"
-}
-add-zsh-hook chpwd iterm_tab_title
-
-# peco history
-# https://qiita.com/reireias/items/fd96d67ccf1fdffb24ed
-function peco-history-selection() {
-  BUFFER=$(history -n 1 | tac | awk '!a[$0]++' | peco)
-  CURSOR=$#BUFFER
-  zle reset-prompt
-}
-zle -N peco-history-selection
-bindkey '^R' peco-history-selection
-export PATH=$PATH:/opt/WebDriver/bin
-[ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
-export PATH="/usr/local/sbin:$PATH"
