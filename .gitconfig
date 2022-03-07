@@ -31,6 +31,8 @@
   ssk  = stash save --keep-index
   sp   = stash pop
   sa   = stash apply
+  sw   = switch
+  swc  = switch --create
   f    = fetch
   p    = pull
 
