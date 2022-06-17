@@ -134,6 +134,20 @@ alias dcr='docker compose run'
 alias dcu='docker compose up'
 alias dcub='docker compose up --build'
 
+function diff_delta() {
+  argv=($@);
+  diff -u $1 $2 | delta ${argv:3:$(($# - 1))}
+}
+
+function diff_r_delta() {
+  argv=($@);
+  diff -ur $1 $2 | delta ${argv:3:$(($# - 1))}
+}
+export -f diff_delta >/dev/null
+export -f diff_r_delta >/dev/null
+alias d='diff_delta'
+alias dr='diff_r_delta'
+
 # aws_sso_auth
 function aws_login () {
   export AWS_PROFILE=$1
