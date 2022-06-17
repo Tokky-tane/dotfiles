@@ -89,16 +89,6 @@ alias tfsp='terraform state pull'
 alias tfsm='terraform state mv'
 alias tfss='terraform state show'
 
-# aws_sso_auth
-alias aa='aws_sso_ruby auth'
-alias aap='aws_sso_ruby auth -p'
-function aws_login () {
-  export AWS_PROFILE=$1
-  aws_sso_ruby auth -p $1
-}
-export aws_login >/dev/null
-alias al='aws_login'
-
 # circleci
 alias ccv='circleci config validate'
 alias celj='circleci execute local --job'
@@ -143,3 +133,43 @@ alias dce='docker compose exec'
 alias dcr='docker compose run'
 alias dcu='docker compose up'
 alias dcub='docker compose up --build'
+
+# aws_sso_auth
+function aws_login () {
+  export AWS_PROFILE=$1
+  # aws sso login >/dev/null
+  ACCESS_TOKEN=$(cat ~/.aws/sso/cache/76e20b5491bc477b0d8be7706bc9a0ba637e7cb1.json | jq -cr '.accessToken')
+  REGION=$(cat ~/.aws/sso/cache/76e20b5491bc477b0d8be7706bc9a0ba637e7cb1.json | jq -cr '.region')
+  ACCOUNT_ID=$(aws configure get sso_account_id --profile $1)
+  ROLE_NAME=$(aws configure get sso_role_name --profile $1)
+
+  cred=$(aws sso get-role-credentials \
+    --account-id ${ACCOUNT_ID} \
+    --role-name ${ROLE_NAME} \
+    --access-token ${ACCESS_TOKEN} \
+    --region ${REGION} \
+    --query roleCredentials);
+
+  if [ $? != 0 ]; then
+    aws sso login
+
+    ACCESS_TOKEN=$(cat ~/.aws/sso/cache/76e20b5491bc477b0d8be7706bc9a0ba637e7cb1.json \
+      | jq -cr '.accessToken')
+
+    cred=$(aws sso get-role-credentials \
+      --account-id ${ACCOUNT_ID} \
+      --role-name ${ROLE_NAME} \
+      --access-token ${ACCESS_TOKEN} \
+      --region ${REGION} \
+      --query roleCredentials);
+  fi
+
+  aws configure set aws_secret_access_key $(echo ${cred} | jq -r '.secretAccessKey') --profile $1
+  aws configure set aws_access_key_id $(echo ${cred} | jq  -r '.accessKeyId') --profile $1
+  aws configure set aws_session_token $(echo ${cred} | jq -r '.sessionToken') --profile $1
+  # aws_sso_ruby auth -p $1
+}
+export aws_login >/dev/null
+alias al='aws_login'
+alias aa='aws_sso_ruby auth'
+alias aap='aws_sso_ruby auth -p'
