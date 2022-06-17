@@ -134,6 +134,8 @@ alias dcr='docker compose run'
 alias dcu='docker compose up'
 alias dcub='docker compose up --build'
 
+alias cdg='cd $(git rev-parse --show-toplevel)'
+
 function diff_delta() {
   argv=($@);
   diff -u $1 $2 | delta ${argv:3:$(($# - 1))}
