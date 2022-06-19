@@ -17,6 +17,8 @@ setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_REDUCE_BLANKS
 setopt HIST_IGNORE_DUPS # 重複した履歴を無視
 setopt SHARE_HISTORY
+# setopt prompt_cr
+# setopt prompt_sp
 
 export LESS='-R -# 2'
 # -, _, /, =, . を削除する
@@ -39,7 +41,8 @@ zstyle ':vcs_info:git:*' formats '(%F{green}%b%f)-(%c%u)'
 zstyle ':vcs_info:git:*' check-for-changes true
 RPROMPT=\$vcs_info_msg_0_
 
-prompt fade blue
+# set_prompt fire red magenta blue white white magenta
+PROMPT='%?>%K{black}%F{green}%D{%H:%M} %B%~%b%f%k '
 
 export AWS_PROFILE=ga-main
 export AWS_REGION=ap-northeast-1
