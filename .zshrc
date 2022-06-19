@@ -1,4 +1,3 @@
-
 # https://github.com/asdf-vm/asdf/issues/266
 autoload -Uz compinit && compinit
 autoload -Uz promptinit && promptinit
