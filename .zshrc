@@ -31,6 +31,7 @@ if [ -f '/Users/t_nakahara/Downloads/google-cloud-sdk/completion.zsh.inc' ]; the
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 eval "$(rbenv init -)"
+eval "$(nodenv init -)"
 
 autoload -Uz vcs_info
 precmd_vcs_info() { vcs_info }
