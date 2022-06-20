@@ -194,3 +194,6 @@ export aws_login >/dev/null
 alias al='aws_login'
 alias aa='aws_sso_ruby auth'
 alias aap='aws_sso_ruby auth -p'
+
+export TF_CLI_ARGS_plan='-parallelism=40'
+export TF_CLI_ARGS_apply='-parallelism=40'
