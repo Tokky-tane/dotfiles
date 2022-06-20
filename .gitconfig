@@ -18,6 +18,7 @@
   cl   = clone
   st   = status --short --branch --show-stash
   l    = log --oneline --graph
+  lp   = log -p
   ln   = log --oneline --graph --name-status
   d    = diff
   dw   = diff --ignore-all-space
