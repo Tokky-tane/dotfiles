@@ -197,3 +197,5 @@ alias aap='aws_sso_ruby auth -p'
 
 export TF_CLI_ARGS_plan='-parallelism=40'
 export TF_CLI_ARGS_apply='-parallelism=40'
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
