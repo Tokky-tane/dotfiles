@@ -20,7 +20,7 @@ setopt SHARE_HISTORY
 # setopt prompt_cr
 # setopt prompt_sp
 
-export LESS='-R -# 2'
+export LESS='--RAW-CONTROL-CHARS --shift 3 --LONG-PROMPT'
 # -, _, /, =, . を削除する
 export WORDCHARS=$(echo $WORDCHARS | sed -e 's/[-_=\.\/]//')
 
