@@ -22,7 +22,7 @@ setopt SHARE_HISTORY
 
 export LESS='--RAW-CONTROL-CHARS --shift 3 --LONG-PROMPT'
 # -, _, /, =, . を削除する
-export WORDCHARS=$(echo $WORDCHARS | sed -e 's/[-_=\.\/]//')
+export WORDCHARS=$(echo $WORDCHARS | sed 's/[\-_\/=\.]//g')
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/t_nakahara/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/t_nakahara/Downloads/google-cloud-sdk/path.zsh.inc'; fi
