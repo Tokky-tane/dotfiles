@@ -71,3 +71,5 @@
 
 [rebase]
   autoSquash = true
+[init]
+	defaultBranch = main
