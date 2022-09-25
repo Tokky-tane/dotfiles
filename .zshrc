@@ -150,8 +150,8 @@ function diff_r_delta() {
   argv=($@);
   diff -ur $1 $2 | delta ${argv:3:$(($# - 1))}
 }
-export -f diff_delta >/dev/null
-export -f diff_r_delta >/dev/null
+export diff_delta >/dev/null
+export diff_r_delta >/dev/null
 alias d='diff_delta'
 alias dr='diff_r_delta'
 
