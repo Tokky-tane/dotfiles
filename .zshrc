@@ -156,14 +156,29 @@ export diff_r_delta >/dev/null
 alias d='diff_delta'
 alias dr='diff_r_delta'
 
+if type gdate > /dev/null 2>&1; then;
+  alias date='gdate'
+fi
+
 # aws_sso_auth
 function aws_login () {
   export AWS_PROFILE=$1
-  # aws sso login >/dev/null
-  ACCESS_TOKEN=$(cat ~/.aws/sso/cache/76e20b5491bc477b0d8be7706bc9a0ba637e7cb1.json | jq -cr '.accessToken')
-  REGION=$(cat ~/.aws/sso/cache/76e20b5491bc477b0d8be7706bc9a0ba637e7cb1.json | jq -cr '.region')
+
+  REGION=$(aws configure get sso_region --profile $1)
   ACCOUNT_ID=$(aws configure get sso_account_id --profile $1)
   ROLE_NAME=$(aws configure get sso_role_name --profile $1)
+
+  if [ -d ~/.aws/sso/cache ]; then
+    sso_cache_file=$(find ~/.aws/sso/cache | grep -E '[a-z0-9]{40}.json')
+    ACCESS_TOKEN=$(cat $sso_cache_file | jq -cr '.accessToken')
+    expires_at=$(cat $sso_cache_file | jq -cr '.expiresAt')
+  fi
+
+  if ! [ -n $ACCESS_TOKEN -a $(date '+%s') -lt $(date -d$expires_at '+%s') ]; then
+    aws sso login
+    sso_cache_file=$(find ~/.aws/sso/cache | grep -E '[a-z0-9]{40}.json')
+    ACCESS_TOKEN=$(cat $sso_cache_file | jq -cr '.accessToken')
+  fi
 
   cred=$(aws sso get-role-credentials \
     --account-id ${ACCOUNT_ID} \
@@ -171,21 +186,6 @@ function aws_login () {
     --access-token ${ACCESS_TOKEN} \
     --region ${REGION} \
     --query roleCredentials);
-
-  if [ $? != 0 ]; then
-    aws sso login
-
-    ACCESS_TOKEN=$(cat ~/.aws/sso/cache/76e20b5491bc477b0d8be7706bc9a0ba637e7cb1.json \
-      | jq -cr '.accessToken')
-
-    cred=$(aws sso get-role-credentials \
-      --account-id ${ACCOUNT_ID} \
-      --role-name ${ROLE_NAME} \
-      --access-token ${ACCESS_TOKEN} \
-      --region ${REGION} \
-      --query roleCredentials);
-  fi
-
   aws configure set aws_secret_access_key $(echo ${cred} | jq -r '.secretAccessKey') --profile $1
   aws configure set aws_access_key_id $(echo ${cred} | jq  -r '.accessKeyId') --profile $1
   aws configure set aws_session_token $(echo ${cred} | jq -r '.sessionToken') --profile $1
