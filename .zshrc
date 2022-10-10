@@ -66,6 +66,8 @@ export PATH="/usr/local/sbin:$PATH"
 export PATH=$PATH:/opt/WebDriver/bin
 export PATH="$PATH:$HOME/Documents/myscripts"
 export PATH="$HOME/.serverless/bin:$PATH"
+[ -d /usr/local/go/bin ] && export PATH="$PATH:/usr/local/go/bin"
+[ -d "$HOME/go/bin" ] && export PATH="$PATH:$HOME/go/bin"
 [ -e "$HOME/.nodenv/bin" ] && export PATH="$HOME/.nodenv/bin:$PATH"
 eval "$(nodenv init -)"
 [ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
