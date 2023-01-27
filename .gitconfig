@@ -14,9 +14,9 @@
   coan = commit --amend --no-edit
   ch   = checkout
   chb  = checkout -b
-  cp   = cherry-pick 
-  cpa  = cherry-pick --abort
-  cpc  = cherry-pick --continue
+  chp   = cherry-pick 
+  chpa  = cherry-pick --abort
+  chpc  = cherry-pick --continue
   i    = init
   cl   = clone
   st   = status --short --branch --show-stash
