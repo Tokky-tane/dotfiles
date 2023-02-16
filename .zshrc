@@ -44,7 +44,6 @@ RPROMPT=\$vcs_info_msg_0_
 # set_prompt fire red magenta blue white white magenta
 PROMPT='%?>%K{black}%F{green}%D{%H:%M} %B%~%b%f%k '
 
-export AWS_PROFILE=ga-main
 export AWS_REGION=ap-northeast-1
 
 DISABLE_AUTO_TITLE="true"
