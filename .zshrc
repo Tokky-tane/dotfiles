@@ -155,10 +155,6 @@ export diff_r_delta >/dev/null
 alias d='diff_delta'
 alias dr='diff_r_delta'
 
-if type gdate > /dev/null 2>&1; then;
-  alias date='gdate'
-fi
-
 # aws_sso_auth
 function aws_login () {
   export AWS_PROFILE=$1
