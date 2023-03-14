@@ -11,6 +11,8 @@ set softtabstop=2
 set tabstop=2
 set shiftwidth=2
 set smartindent
+set cursorline
+set cursorcolumn
 set backspace=indent,eol,start
 
 if exists('g:vscode')
