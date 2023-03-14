@@ -9,6 +9,7 @@ complete -o nospace -C /usr/local/Cellar/tfenv/2.2.2/versions/0.13.3/terraform t
 complete -o nospace -C /usr/local/Cellar/tfenv/2.2.0/versions/0.15.0/terraform terraform
 complete -o nospace -C /usr/local/Cellar/tfenv/2.2.2/versions/0.14.10/terraform terraform
 complete -o nospace -C /usr/local/Cellar/tfenv/2.2.3/versions/1.1.7/terraform terraform
+complete -o nospace -C /usr/local/Cellar/tfenv/3.0.0/versions/1.3.2/terraform terraform
 
 export HISTFILE=$HOME/.zsh_history
 export SAVEHIST=100000
