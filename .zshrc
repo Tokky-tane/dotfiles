@@ -149,7 +149,7 @@ function diff_delta() {
 
 function diff_r_delta() {
   argv=($@);
-  diff -ur $1 $2 | delta ${argv:3:$(($# - 1))}
+  diff -ur --exclude='.git' --exclude='.terraform' $1 $2 | delta ${argv:3:$(($# - 1))}
 }
 export diff_delta >/dev/null
 export diff_r_delta >/dev/null
