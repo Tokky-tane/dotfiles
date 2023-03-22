@@ -227,3 +227,13 @@ if type fd > /dev/null 2>&1; then;
     fd --type d --hidden --follow --exclude ".git" --exclude ".terraform" . "$1"
   }
 fi
+
+function jump_directory_moved_recentry() {
+  dest=$(z -l | awk '{ print $2 }' | fzf --layout=reverse --height=20%)
+  if [ -z "${dest}" ]; then
+    return
+  fi
+
+  cd ${dest}
+}
+alias c='jump_directory_moved_recentry'
