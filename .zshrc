@@ -192,6 +192,27 @@ alias al='aws_login'
 alias aa='aws_sso_ruby auth'
 alias aap='aws_sso_ruby auth -p'
 
+function github_pr_review {
+  pr_url=$1
+  gh pr edit \
+    --remove-assignee '@me' \
+    --add-assignee $(gh pr view $pr_url --json author | jq -r '.author.login') \
+    $pr_url
+}
+export github_pr_review  >/dev/null
+alias gpr='github_pr_review'
+
+function github_pr_approve {
+  pr_url=$1
+  gh pr review -a $pr_url
+  gh pr edit \
+    --remove-assignee '@me' \
+    --add-assignee $(gh pr view $pr_url --json author | jq -r '.author.login') \
+    $pr_url
+}
+export github_pr_approve >/dev/null
+alias gpa='github_pr_approve'
+
 export TF_CLI_ARGS_plan='-parallelism=40'
 export TF_CLI_ARGS_apply='-parallelism=40'
 
