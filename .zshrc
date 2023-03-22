@@ -165,15 +165,8 @@ function aws_login () {
   ROLE_NAME=$(aws configure get sso_role_name --profile $1)
 
   if [ -d ~/.aws/sso/cache ]; then
-    sso_cache_file=$(find ~/.aws/sso/cache | grep -E '[a-z0-9]{40}.json')
-    ACCESS_TOKEN=$(cat $sso_cache_file | jq -cr '.accessToken')
-    expires_at=$(cat $sso_cache_file | jq -cr '.expiresAt')
-  fi
-
-  if ! [ -n $ACCESS_TOKEN -a $(date '+%s') -lt $(date -d$expires_at '+%s') ]; then
-    aws sso login
-    sso_cache_file=$(find ~/.aws/sso/cache | grep -E '[a-z0-9]{40}.json')
-    ACCESS_TOKEN=$(cat $sso_cache_file | jq -cr '.accessToken')
+    ACCESS_TOKEN=$(grep -l accessToken ~/.aws/sso/cache/* |
+        xargs jq -r ".accessToken")
   fi
 
   cred=$(aws sso get-role-credentials \
@@ -182,6 +175,20 @@ function aws_login () {
     --access-token ${ACCESS_TOKEN} \
     --region ${REGION} \
     --query roleCredentials);
+
+  if [ $? -ne 0 ]; then
+    aws sso login
+    ACCESS_TOKEN=$(grep -l accessToken ~/.aws/sso/cache/* |
+        xargs jq -r ".accessToken")
+
+    cred=$(aws sso get-role-credentials \
+      --account-id ${ACCOUNT_ID} \
+      --role-name ${ROLE_NAME} \
+      --access-token ${ACCESS_TOKEN} \
+      --region ${REGION} \
+      --query roleCredentials);
+  fi
+
   aws configure set aws_secret_access_key $(echo ${cred} | jq -r '.secretAccessKey') --profile $1
   aws configure set aws_access_key_id $(echo ${cred} | jq  -r '.accessKeyId') --profile $1
   aws configure set aws_session_token $(echo ${cred} | jq -r '.sessionToken') --profile $1
