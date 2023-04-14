@@ -239,6 +239,17 @@ function github_pr_approve {
 export github_pr_approve >/dev/null
 alias gpa='github_pr_approve'
 
+function github_pr_checkout {
+  gh pr list \
+    --json author,number,title \
+    --template '{{range .}}{{tablerow .number .author.login .title}}{{end}}' |
+    fzf --height 12 |
+    awk '{print $1}' |
+    xargs gh pr checkout
+}
+export github_pr_checkout >/dev/null
+alias gpc='github_pr_checkout'
+
 export TF_CLI_ARGS_plan='-parallelism=40'
 export TF_CLI_ARGS_apply='-parallelism=40'
 
