@@ -250,6 +250,25 @@ function github_pr_checkout {
 export github_pr_checkout >/dev/null
 alias gpc='github_pr_checkout'
 
+function exec_command {
+  cluster=$(
+    aws ecs list-clusters |
+      jq -r '.clusterArns[]' |
+      awk -F '/' '{ print $2 }' |
+      fzf --height 5
+  )
+  task=$(
+    aws ecs list-tasks --cluster $cluster |
+      jq -r '.taskArns[]' |
+      fzf --height 5
+  )
+  aws ecs execute-command \
+    --command /bin/bash \
+    --interactive \
+    --cluster $cluster \
+    --task $task
+}
+
 export TF_CLI_ARGS_plan='-parallelism=40'
 export TF_CLI_ARGS_apply='-parallelism=40'
 
