@@ -99,7 +99,7 @@ alias ccv='circleci config validate'
 alias celj='circleci execute local --job'
 
 # util
-alias zshrc='vim ~/.zshrc'
+alias zshrc='vim ~/.zshrc && source ~/.zshrc'
 alias gitconfig='vim ~/.gitconfig'
 
 # git
