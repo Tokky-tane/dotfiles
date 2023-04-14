@@ -200,6 +200,24 @@ alias al='aws_login'
 alias aa='aws_sso_ruby auth'
 alias aap='aws_sso_ruby auth -p'
 
+function aws_login_default {
+  profile=$1
+  account_id=$(aws configure get sso_account_id --profile $profile)
+  role=$(aws configure get sso_role_name --profile $profile)
+  key=$(aws configure get aws_secret_access_key --profile $profile)
+  key_id=$(aws configure get aws_access_key_id --profile $profile)
+  token=$(aws configure get aws_session_token  --profile $profile)
+
+  aws configure set sso_account_id $account_id --profile default
+  aws configure set sso_role_name $role --profile default
+  aws configure set aws_secret_access_key $role --profile default
+  aws configure set aws_access_key_id $key_id --profile default
+  aws configure set aws_session_token $token --profile default
+}
+
+export aws_login_default >/dev/null
+alias ald='aws_login_default'
+
 function github_pr_review {
   pr_url=$1
   gh pr edit \
