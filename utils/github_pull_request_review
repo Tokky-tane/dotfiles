@@ -1,0 +1,7 @@
+#!/bin/bash
+
+pr_url=$1
+gh pr edit \
+  --remove-assignee '@me' \
+  --add-assignee $(gh pr view $pr_url --json 'author' --jq '.author.login') \
+  $pr_url

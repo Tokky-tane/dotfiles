@@ -1,0 +1,5 @@
+#!/bin/bash
+
+pr_url=$1
+gh pr review -a $pr_url
+github_pull_request_review

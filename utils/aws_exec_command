@@ -1,0 +1,18 @@
+#!/bin/bash
+
+cluster=$(
+  aws ecs list-clusters |
+    jq -r '.clusterArns[]' |
+    awk -F '/' '{ print $2 }' |
+    fzf --height 5
+)
+task=$(
+  aws ecs list-tasks --cluster $cluster |
+    jq -r '.taskArns[]' |
+    fzf --height 5
+)
+aws ecs execute-command \
+  --command /bin/bash \
+  --interactive \
+  --cluster $cluster \
+  --task $task

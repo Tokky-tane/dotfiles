@@ -1,0 +1,8 @@
+#!/bin/bash
+
+gh pr list \
+  --json author,number,title \
+  --template '{{range .}}{{tablerow .number .author.login .title}}{{end}}' |
+  fzf --height 12 |
+  awk '{print $1}' |
+  xargs gh pr checkout

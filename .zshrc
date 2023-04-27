@@ -52,6 +52,7 @@ export PATH="/usr/local/sbin:$PATH"
 export PATH=$PATH:/opt/WebDriver/bin
 export PATH="$PATH:$HOME/Documents/myscripts"
 export PATH="$HOME/.serverless/bin:$PATH"
+[ -e "$HOME/bin" ] && export PATH="$PATH:$HOME/bin"
 [ -e "$HOME/.nodenv/bin" ] && export PATH="$HOME/.nodenv/bin:$PATH"
 eval "$(nodenv init -)"
 
@@ -128,131 +129,17 @@ alias dcub='docker compose up --build'
 
 alias cdg='cd $(git rev-parse --show-toplevel)'
 
-function diff_delta() {
-  argv=($@);
-  diff -u $1 $2 | delta ${argv:3:$(($# - 1))}
-}
+alias d='delta_diff'
 
-function diff_r_delta() {
-  argv=($@);
-  diff -ur --exclude='.git' --exclude='.terraform' $1 $2 | delta ${argv:3:$(($# - 1))}
-}
-export diff_delta >/dev/null
-export diff_r_delta >/dev/null
-alias d='diff_delta'
-alias dr='diff_r_delta'
-
-# aws_sso_auth
-function aws_login () {
-  export AWS_PROFILE=$1
-
-  REGION=$(aws configure get sso_region --profile $1)
-  ACCOUNT_ID=$(aws configure get sso_account_id --profile $1)
-  ROLE_NAME=$(aws configure get sso_role_name --profile $1)
-
-  if [ -d ~/.aws/sso/cache ]; then
-    ACCESS_TOKEN=$(grep -l accessToken ~/.aws/sso/cache/* |
-        xargs jq -r ".accessToken")
-  fi
-
-  cred=$(aws sso get-role-credentials \
-    --account-id ${ACCOUNT_ID} \
-    --role-name ${ROLE_NAME} \
-    --access-token ${ACCESS_TOKEN} \
-    --region ${REGION} \
-    --query roleCredentials);
-
-  if [ $? -ne 0 ]; then
-    aws sso login
-    ACCESS_TOKEN=$(grep -l accessToken ~/.aws/sso/cache/* |
-        xargs jq -r ".accessToken")
-
-    cred=$(aws sso get-role-credentials \
-      --account-id ${ACCOUNT_ID} \
-      --role-name ${ROLE_NAME} \
-      --access-token ${ACCESS_TOKEN} \
-      --region ${REGION} \
-      --query roleCredentials);
-  fi
-
-  aws configure set aws_secret_access_key $(echo ${cred} | jq -r '.secretAccessKey') --profile $1
-  aws configure set aws_access_key_id $(echo ${cred} | jq  -r '.accessKeyId') --profile $1
-  aws configure set aws_session_token $(echo ${cred} | jq -r '.sessionToken') --profile $1
-  # aws_sso_ruby auth -p $1
-}
-export aws_login >/dev/null
-alias al='aws_login'
+alias al='source aws_sso_login'
+alias ald='aws_sso_login_default'
 alias aa='aws_sso_ruby auth'
 alias aap='aws_sso_ruby auth -p'
 
-function aws_login_default {
-  profile=$1
-  account_id=$(aws configure get sso_account_id --profile $profile)
-  role=$(aws configure get sso_role_name --profile $profile)
-  key=$(aws configure get aws_secret_access_key --profile $profile)
-  key_id=$(aws configure get aws_access_key_id --profile $profile)
-  token=$(aws configure get aws_session_token  --profile $profile)
 
-  aws configure set sso_account_id $account_id --profile default
-  aws configure set sso_role_name $role --profile default
-  aws configure set aws_secret_access_key $role --profile default
-  aws configure set aws_access_key_id $key_id --profile default
-  aws configure set aws_session_token $token --profile default
-}
-
-export aws_login_default >/dev/null
-alias ald='aws_login_default'
-
-function github_pr_review {
-  pr_url=$1
-  gh pr edit \
-    --remove-assignee '@me' \
-    --add-assignee $(gh pr view $pr_url --json author | jq -r '.author.login') \
-    $pr_url
-}
-export github_pr_review  >/dev/null
-alias gpr='github_pr_review'
-
-function github_pr_approve {
-  pr_url=$1
-  gh pr review -a $pr_url
-  gh pr edit \
-    --remove-assignee '@me' \
-    --add-assignee $(gh pr view $pr_url --json author | jq -r '.author.login') \
-    $pr_url
-}
-export github_pr_approve >/dev/null
-alias gpa='github_pr_approve'
-
-function github_pr_checkout {
-  gh pr list \
-    --json author,number,title \
-    --template '{{range .}}{{tablerow .number .author.login .title}}{{end}}' |
-    fzf --height 12 |
-    awk '{print $1}' |
-    xargs gh pr checkout
-}
-export github_pr_checkout >/dev/null
-alias gpc='github_pr_checkout'
-
-function exec_command {
-  cluster=$(
-    aws ecs list-clusters |
-      jq -r '.clusterArns[]' |
-      awk -F '/' '{ print $2 }' |
-      fzf --height 5
-  )
-  task=$(
-    aws ecs list-tasks --cluster $cluster |
-      jq -r '.taskArns[]' |
-      fzf --height 5
-  )
-  aws ecs execute-command \
-    --command /bin/bash \
-    --interactive \
-    --cluster $cluster \
-    --task $task
-}
+alias gpr='github_pull_request_review'
+alias gpa='github_pull_request_approve'
+alias gpc='github_pull_request_checkout'
 
 export TF_CLI_ARGS_plan='-parallelism=40'
 export TF_CLI_ARGS_apply='-parallelism=40'
