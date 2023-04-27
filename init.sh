@@ -1,1 +1,1 @@
-ln -s $(find . -name '\.*' -type f) ~/  
+ln -s $(find $(pwd) -name '\.*' -type f) ~/
