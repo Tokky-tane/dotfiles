@@ -4,11 +4,6 @@ autoload -Uz promptinit && promptinit
 autoload -U +X bashcompinit && bashcompinit
 
 complete -C '/usr/local/bin/aws_completer' aws # https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-configure-completion.html
-complete -o nospace -C /usr/local/Cellar/tfenv/2.2.2/versions/0.12.28/terraform terraform
-complete -o nospace -C /usr/local/Cellar/tfenv/2.2.2/versions/0.13.3/terraform terraform
-complete -o nospace -C /usr/local/Cellar/tfenv/2.2.0/versions/0.15.0/terraform terraform
-complete -o nospace -C /usr/local/Cellar/tfenv/2.2.2/versions/0.14.10/terraform terraform
-complete -o nospace -C /usr/local/Cellar/tfenv/2.2.3/versions/1.1.7/terraform terraform
 complete -o nospace -C /usr/local/Cellar/tfenv/3.0.0/versions/1.3.2/terraform terraform
 
 export HISTFILE=$HOME/.zsh_history
