@@ -4,6 +4,7 @@
 [alias]
   a     = add
   aa    = add .
+  ap    = add --patch
   b     = branch
   ba    = branch --all
   bm    = branch --merged
