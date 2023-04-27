@@ -24,14 +24,14 @@
   st    = status --short --branch --show-stash
   l     = log --oneline --graph
   la    = log --oneline --graph --all
-  lp    = log -p
+  lp    = log --patch
   ln    = log --oneline --graph --name-status
   d     = diff
   dw    = diff --ignore-all-space
   ds    = diff --staged
   dsw   = diff --staged --ignore-all-space
   r     = rebase
-  ri    = rebase -i
+  ri    = rebase --interactive
   rc    = rebase --continue
   ra    = rebase --abort
   ss    = stash save
