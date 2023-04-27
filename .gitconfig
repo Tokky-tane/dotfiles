@@ -2,44 +2,44 @@
   path = .gitconfig.user
 
 [alias]
-  a    = add
-  aa   = add .
-  b    = branch
-  ba   = branch --all
-  bm   = branch --merged
-  co   = commit
-  cof  = commit --fixup
-  com  = commit --message
-  coa  = commit --amend
-  coan = commit --amend --no-edit
-  ch   = checkout
-  chb  = checkout -b
-  chp   = cherry-pick 
+  a     = add
+  aa    = add .
+  b     = branch
+  ba    = branch --all
+  bm    = branch --merged
+  co    = commit
+  cof   = commit --fixup
+  com   = commit --message
+  coa   = commit --amend
+  coan  = commit --amend --no-edit
+  ch    = checkout
+  chb   = checkout -b
+  chp   = cherry-pick
   chpa  = cherry-pick --abort
   chpc  = cherry-pick --continue
-  i    = init
-  cl   = clone
-  st   = status --short --branch --show-stash
-  l    = log --oneline --graph
-  la   = log --oneline --graph --all
-  lp   = log -p
-  ln   = log --oneline --graph --name-status
-  d    = diff
-  dw   = diff --ignore-all-space
-  ds   = diff --staged
-  dsw  = diff --staged --ignore-all-space
-  r    = rebase
-  ri   = rebase -i
-  rc   = rebase --continue
-  ra   = rebase --abort
-  ss   = stash save
-  ssk  = stash save --keep-index
-  sp   = stash pop
-  sa   = stash apply
-  sw   = switch
-  swc  = switch --create
-  f    = fetch
-  p    = pull
+  i     = init
+  cl    = clone
+  st    = status --short --branch --show-stash
+  l     = log --oneline --graph
+  la    = log --oneline --graph --all
+  lp    = log -p
+  ln    = log --oneline --graph --name-status
+  d     = diff
+  dw    = diff --ignore-all-space
+  ds    = diff --staged
+  dsw   = diff --staged --ignore-all-space
+  r     = rebase
+  ri    = rebase -i
+  rc    = rebase --continue
+  ra    = rebase --abort
+  ss    = stash save
+  ssk   = stash save --keep-index
+  sp    = stash pop
+  sa    = stash apply
+  sw    = switch
+  swc   = switch --create
+  f     = fetch
+  p     = pull
 
 [core]
   excludesfile = /Users/t_nakahara/.gitignore_global
@@ -76,4 +76,4 @@
 [rebase]
   autoSquash = true
 [init]
-	defaultBranch = main
+  defaultBranch = main
