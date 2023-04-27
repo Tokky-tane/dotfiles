@@ -53,6 +53,8 @@ export PATH=$PATH:/opt/WebDriver/bin
 export PATH="$PATH:$HOME/Documents/myscripts"
 export PATH="$HOME/.serverless/bin:$PATH"
 [ -e "$HOME/bin" ] && export PATH="$PATH:$HOME/bin"
+[ -d /usr/local/go/bin ] && export PATH="$PATH:/usr/local/go/bin"
+[ -d "$HOME/go/bin" ] && export PATH="$PATH:$HOME/go/bin"
 [ -e "$HOME/.nodenv/bin" ] && export PATH="$HOME/.nodenv/bin:$PATH"
 eval "$(nodenv init -)"
 
