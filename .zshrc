@@ -59,7 +59,6 @@ export PATH="$PATH:$HOME/Documents/myscripts"
 export PATH="$HOME/.serverless/bin:$PATH"
 [ -e "$HOME/.nodenv/bin" ] && export PATH="$HOME/.nodenv/bin:$PATH"
 eval "$(nodenv init -)"
-[ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
 
 # 現在の入力から始まるコマンドの履歴を表示するようにする
 [[ -n "${key[PageUp]}" ]] && bindkey "${key[PageUp]}" history-beginning-search-backward
