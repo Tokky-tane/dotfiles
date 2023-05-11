@@ -1,0 +1,17 @@
+#!/bin/bash
+
+base=$1
+head=$2
+
+git fetch
+gh pr create -w \
+  --base "${base}" \
+  --head "${head}" \
+  --title "${head} to ${base}" \
+  --body "$(
+    git log --oneline "origin/${base}..origin/${head}" |
+      rg ' Merge pull request' |
+      rg -o '#\d+' |
+      xargs -n1 echo '- [ ] ' |
+      tac
+  )"
