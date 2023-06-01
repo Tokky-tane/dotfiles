@@ -9,7 +9,6 @@
   ba    = branch --all
   bm    = branch --merged
   bcl   = !git branch --delete $(git branch --merged | grep -v '*')
-  cd    = !cd $(git rev-parse --show-toplevel)
   co    = commit
   cof   = commit --fixup
   com   = commit --message

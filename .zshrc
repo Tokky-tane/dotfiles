@@ -129,6 +129,8 @@ alias dcr='docker compose run'
 alias dcu='docker compose up'
 alias dcub='docker compose up --build'
 
+alias cdg='cd $(git rev-parse --show-toplevel)'
+
 alias d='delta_diff'
 
 alias al='source aws_sso_login'
