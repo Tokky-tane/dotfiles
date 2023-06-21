@@ -4,12 +4,12 @@ cluster=$(
   aws ecs list-clusters |
     jq -r '.clusterArns[]' |
     awk -F '/' '{ print $2 }' |
-    fzf --height 5
+    fzf --height 5 --select-1
 )
 task=$(
   aws ecs list-tasks --cluster $cluster |
     jq -r '.taskArns[]' |
-    fzf --height 5
+    fzf --height 5 --select-1
 )
 aws ecs execute-command \
   --command /bin/bash \
