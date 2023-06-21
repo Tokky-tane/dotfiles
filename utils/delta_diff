@@ -11,4 +11,4 @@ done
 
 delta_options=${@:3:$(($# - 1))}
 
-diff -u ${recursive_options} $1 $2 | delta $delta_options
+eval "diff -u ${recursive_options} $1 $2 | delta $delta_options"
