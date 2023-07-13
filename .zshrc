@@ -6,6 +6,8 @@ autoload -U +X bashcompinit && bashcompinit
 complete -C '/usr/local/bin/aws_completer' aws # https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-configure-completion.html
 complete -o nospace -C /usr/local/Cellar/tfenv/3.0.0/versions/1.3.2/terraform terraform
 
+eval "$(zoxide init zsh)"
+
 export HISTFILE=$HOME/.zsh_history
 export SAVEHIST=100000
 export HISTSIZE=100000
@@ -157,13 +159,3 @@ if type fd > /dev/null 2>&1; then;
     fd --type d --hidden --follow --exclude ".git" --exclude ".terraform" . "$1"
   }
 fi
-
-function jump_directory_moved_recentry() {
-  dest=$(z -l | awk '{ print $2 }' | fzf --layout=reverse --height=20%)
-  if [ -z "${dest}" ]; then
-    return
-  fi
-
-  cd ${dest}
-}
-alias c='jump_directory_moved_recentry'
