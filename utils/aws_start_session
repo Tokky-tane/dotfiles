@@ -1,0 +1,22 @@
+#!/bin/bash
+
+instances=$(
+  aws ec2 describe-instances \
+    --query "Reservations[*].Instances[*].[InstanceId, Tags[?Key=='Name'].Value | [0]]" \
+    --output text
+)
+selected_instance=$(
+  echo "${instances}" | fzf --reverse --select-1 --height 30% | awk '{print $1}'
+)
+instance_status=$(
+  aws ec2 describe-instances \
+  --instance-ids "${selected_instance}" \
+  --query "Reservations[*].Instances[*].State.Name" \
+  --output text
+)
+if [ "${instance_status}" != "running" ]; then
+  aws ec2 start-instances --instance-ids "${selected_instance}"
+  echo "starting instance ${selected_instance} ..."
+  sleep 30
+fi
+aws ssm start-session --target "${selected_instance}"
