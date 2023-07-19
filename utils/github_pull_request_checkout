@@ -3,6 +3,6 @@
 gh pr list \
   --json author,number,title \
   --template '{{range .}}{{tablerow .number .author.login .title}}{{end}}' |
-  fzf --height 12 |
+  fzf --select-1 --height 30% --reverse |
   awk '{print $1}' |
   xargs gh pr checkout
