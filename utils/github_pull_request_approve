@@ -1,5 +1,11 @@
 #!/bin/bash
 
 pr_url=$1
-gh pr review -a $pr_url
+pr_comment=$2
+
+if [ -z "${pr_comment}" ]; then
+  gh pr review -a $pr_url
+else
+  gh pr review -a $pr_url -b $pr_comment
+fi
 github_pull_request_review $pr_url
