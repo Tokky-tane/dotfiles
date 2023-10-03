@@ -159,3 +159,11 @@ if type fd > /dev/null 2>&1; then;
     fd --type d --hidden --follow --exclude ".git" --exclude ".terraform" . "$1"
   }
 fi
+
+show_snippets() {
+    local snippets=$(cat ~/.zsh_snippet | fzf | cut -d':' -f2-)
+    LBUFFER="${LBUFFER}${snippets}"
+    zle reset-prompt
+}
+zle -N show_snippets
+bindkey '^o' show_snippets

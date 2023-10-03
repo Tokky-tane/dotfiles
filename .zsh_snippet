@@ -1,0 +1,10 @@
+while read l; do echo $l; done
+for i in ;do echo $l ;done
+if [  ]; then ;fi
+awk '{print $1}'
+awk '{printf "", $1}'
+awk -F '' '{print $1}'
+cut -d '' -f
+xargs -n1 -I{}
+jq -cr '.'
+curl -sLI
