@@ -27,6 +27,7 @@
   lp    = log --patch
   ln    = log --oneline --graph --name-status
   d     = diff
+  do    = !git diff origin/$(git branch --show-current)
   dw    = diff --ignore-all-space
   ds    = diff --staged
   dsw   = diff --staged --ignore-all-space
