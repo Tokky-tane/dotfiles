@@ -7,7 +7,7 @@ cluster=$(
     fzf --height 5 --select-1
 )
 task=$(
-  aws ecs list-tasks --cluster $cluster |
+  aws ecs list-tasks --cluster $cluster --launch-type FARGATE |
     jq -r '.taskArns[]' |
     fzf --height 5 --select-1
 )
