@@ -86,7 +86,7 @@ alias tfss='terraform state show'
 
 # circleci
 alias ccv='circleci config validate'
-alias celj='circleci execute local --job'
+alias cle='circleci local execute --job'
 
 # util
 alias zshrc='vim ~/.zshrc && source ~/.zshrc'
