@@ -1,26 +1,73 @@
 #!/bin/bash
 
+function exec_in_ec2() {
+  cluster=$1
+  task_arn=$2
+  tasks=$3
+
+  container_instance_arn=$(
+    jq --arg arn $task_arn -r 'select(.taskArn == $arn)|.containerInstanceArn' <<<"$tasks"
+  )
+  instance_id=$(
+    aws ecs describe-container-instances --cluster $cluster --container-instances "${container_instance_arn}" |
+      jq -r '.containerInstances[]|.ec2InstanceId'
+  )
+  echo aws ssm start-session --target "${instance_id}"
+  aws ssm start-session --target "${instance_id}"
+}
+
+function exec_in_fargate() {
+  cluster=$1
+  task_arn=$2
+  tasks=$3
+
+  container=$(
+    jq --arg arn $task_arn -r 'select(.taskArn == $arn)|.containers[].name' <<<"$tasks" |
+      fzf --select-1
+  )
+
+  echo aws ecs execute-command --command /bin/bash --interactive --cluster $cluster --container $container --task $task_arn
+
+  aws ecs execute-command \
+    --command /bin/bash \
+    --interactive \
+    --cluster $cluster \
+    --container $container \
+    --task $task_arn
+}
+
 cluster=$(
   aws ecs list-clusters |
     jq -r '.clusterArns[]' |
     awk -F '/' '{ print $2 }' |
-    fzf --height 5 --select-1
-)
-task=$(
-  aws ecs list-tasks --cluster $cluster --launch-type FARGATE |
-    jq -r '.taskArns[]' |
-    fzf --height 5 --select-1
-)
-container=$(
-  aws ecs describe-tasks --cluster $cluster \
-    --tasks $task |
-  jq -r '.tasks[]|.containers[].name' |
-  fzf --select-1
+    fzf --select-1
 )
 
-aws ecs execute-command \
-  --command /bin/bash \
-  --interactive \
-  --cluster $cluster \
-  --container $container \
-  --task $task
+task_arns=$(
+  aws ecs list-tasks --cluster $cluster |
+    jq -r '.taskArns[]'
+)
+
+tasks=$(
+  echo "$task_arns" |
+    xargs -n10 aws ecs describe-tasks --cluster $cluster --tasks |
+    jq '.tasks[]'
+)
+
+selected=$(
+  jq -r '[.group, .taskArn, .launchType]|@tsv' <<<"$tasks" |
+    column -t |
+    fzf
+)
+
+task_arn=$(echo $selected | awk '{ print $2 }')
+type=$(echo $selected | awk '{ print $3 }')
+
+case "${type}" in
+  FARGATE)
+    exec_in_fargate "${cluster}" "${task_arn}" "${tasks}"
+  ;;
+  EC2)
+    exec_in_ec2 "${cluster}" "${task_arn}" "${tasks}"
+  ;;
+esac
