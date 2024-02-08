@@ -145,6 +145,7 @@ alias gpr='github_pull_request_review'
 alias gpa='github_pull_request_approve'
 alias gpc='github_pull_request_checkout'
 alias ghb='gh browse'
+alias ghpc='gh pr create -w'
 
 export TF_CLI_ARGS_plan='-parallelism=40'
 export TF_CLI_ARGS_apply='-parallelism=40'
