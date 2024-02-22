@@ -10,7 +10,7 @@
   bm    = branch --merged
   bcl   = !git branch --delete $(git branch --merged | grep -v '*')
   co    = commit
-  cof   = commit --fixup
+  cof   = !git commit --fixup $(git-pick-from-log)
   com   = commit --message
   coa   = commit --amend
   coan  = commit --amend --no-edit
