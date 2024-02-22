@@ -169,3 +169,5 @@ show_snippets() {
 }
 zle -N show_snippets
 bindkey '^o' show_snippets
+
+export BAT_THEME=Coldark-Dark
