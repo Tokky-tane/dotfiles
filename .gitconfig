@@ -43,6 +43,7 @@
   swc   = switch --create
   f     = fetch
   p     = pull
+  ps    = !git push --set-upstream origin $(git branch --show-current)
 
 [core]
   excludesfile = /Users/t_nakahara/.gitignore_global
