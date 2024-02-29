@@ -9,8 +9,8 @@ complete -o nospace -C /usr/local/Cellar/tfenv/3.0.0/versions/1.3.2/terraform te
 eval "$(zoxide init zsh)"
 
 export HISTFILE=$HOME/.zsh_history
-export SAVEHIST=100000
-export HISTSIZE=100000
+export SAVEHIST=500000
+export HISTSIZE=500000
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_REDUCE_BLANKS
 setopt HIST_IGNORE_DUPS # 重複した履歴を無視
