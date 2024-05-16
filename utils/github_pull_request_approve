@@ -8,4 +8,3 @@ if [ -z "${pr_comment}" ]; then
 else
   gh pr review -a $pr_url -b $pr_comment
 fi
-github_pull_request_review $pr_url
