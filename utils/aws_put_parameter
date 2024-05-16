@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -eu
+
+aws ssm put-parameter \
+  --overwrite \
+  --name $1 \
+  --value $2
