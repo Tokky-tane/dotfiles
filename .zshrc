@@ -186,6 +186,7 @@ if type fd > /dev/null 2>&1; then;
     fd --type d --hidden --follow --exclude ".git" --exclude ".terraform" . "$1"
   }
 fi
+source <(fzf --zsh)
 
 show_snippets() {
     local snippets=$(cat ~/.zsh_snippet | fzf | cut -d':' -f2-)
