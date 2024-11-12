@@ -50,14 +50,21 @@ iterm_tab_title() {
 }
 add-zsh-hook chpwd iterm_tab_title
 
-export PATH="/usr/local/sbin:$PATH"
-export PATH=$PATH:/opt/WebDriver/bin
-export PATH="$PATH:$HOME/Documents/myscripts"
-export PATH="$HOME/.serverless/bin:$PATH"
-[ -e "$HOME/bin" ] && export PATH="$PATH:$HOME/bin"
-[ -d /usr/local/go/bin ] && export PATH="$PATH:/usr/local/go/bin"
-[ -d "$HOME/go/bin" ] && export PATH="$PATH:$HOME/go/bin"
-[ -e "$HOME/.nodenv/bin" ] && export PATH="$HOME/.nodenv/bin:$PATH"
+path_list=(
+  "/usr/local/sbin"
+  "$HOME/.serverless/bin"
+  "$HOME/bin"
+  "$HOME/go/bin"
+  "$HOME/.nodenv/bin"
+  "/opt/WebDriver/bin"
+  "/opt/homebrew/opt/postgresql@16/bin"
+)
+for additional_path in "${path_list[@]}"; do
+  if [ -d "$additional_path" ] && [[ ":$PATH:" != *":$additional_path:"* ]]; then
+    PATH="$additional_path:$PATH"
+  fi
+done
+
 eval "$(nodenv init -)"
 
 # 現在の入力から始まるコマンドの履歴を表示するようにする
