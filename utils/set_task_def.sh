@@ -1,15 +1,18 @@
 #!/bin/bash
 
-read -p 'desired-task-count?: ' desired_count
+desired_count=$1
 
-cluster=$(
-  aws ecs list-clusters |
-    jq -r '.clusterArns[]' |
-    awk -F '/' '{ print $2 }' |
-    fzf --select-1
-)
+if [ -z "${desired_count}"  ]; then
+  read -p 'desired-task-count?: ' desired_count
+fi
 
-aws ecs list-services --cluster $cluster |
-  jq -r '.serviceArns[]' |
-  fzf -m --select-1 | 
-  xargs -n1 -I{} aws ecs update-service --cluster $cluster --service {} --desired-count "${desired_count}"
+aws ecs list-clusters |
+  jq -r '.clusterArns[]' |
+  awk -F '/' '{ print $2 }' |
+  fzf -m --select-1 |
+  while read cluster; do
+    aws ecs list-services --cluster "${cluster}" |
+      jq -r '.serviceArns[]' |
+      fzf -m --select-1 |
+      xargs -n1 -I{} aws ecs update-service --cluster "${cluster}" --service {} --desired-count "${desired_count}"
+  done
