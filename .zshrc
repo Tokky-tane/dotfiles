@@ -198,3 +198,5 @@ bindkey '^o' show_snippets
 export BAT_THEME=Coldark-Dark
 
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local
+
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
