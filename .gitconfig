@@ -47,6 +47,7 @@
 
 [core]
   excludesfile = /Users/t_nakahara/.gitignore_global
+  quotepath = false
 
 [pager]
   diff = delta
