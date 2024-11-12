@@ -158,6 +158,20 @@ alias git-pick-commit='fzf --reverse --preview "git show {1} --color=always" --h
 alias git-pick-from-log='git log --oneline | git-pick-commit'
 alias git-pick-from-reflog='git reflog | git-pick-commit'
 
+if ! which watch > /dev/null; then
+  function watch() {
+    zparseopts -D -E -a optionArray -A optionPair n:
+    if [[ -n "${optionArray[(i)-n]}" ]]; then
+      sleep_n="${optionPair[-n]}"
+    fi
+    while true; do
+      $@
+      sleep "${sleep_n:-1}"
+      clear
+    done
+  }
+fi
+
 export TF_CLI_ARGS_plan='-parallelism=40'
 export TF_CLI_ARGS_apply='-parallelism=40'
 
