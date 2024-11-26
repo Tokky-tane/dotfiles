@@ -1,4 +1,21 @@
 # !/bin/bash
-ln -s $(find $(pwd) -name '\.*' -type f) ~/
+
+find $(pwd) -name '\.*' -type f |
+  while read file; do
+    if [ -e "$file" ]; then
+      echo "skip create link ${file}" >&2
+      continue
+    fi
+    ln -s "${file}" ~/
+  done
+
 mkdir -p ~/bin
-ln -s $(find $(pwd)/utils -type f) ~/bin/
+
+find $(pwd)/utils -type f |
+  while read file; do
+    if [ -e "$file" ]; then
+      echo "skip create link ${file}" >&2
+      continue
+    fi
+    ln -s "${file}" ~/bin/
+  done
