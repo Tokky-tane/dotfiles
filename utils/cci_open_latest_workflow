@@ -1,0 +1,28 @@
+#!/bin/bash
+
+AUTH_HEADER="Circle-Token: ${CIRCLE_TOKEN}"
+
+read -r owner repo <<<"$(
+  gh repo view --json 'owner,name' |
+    jq -rc '[.owner.login, .name]|@tsv'
+)"
+
+read -r pipeline_id pipline_number <<<"$(
+  curl -sH "${AUTH_HEADER}" \
+    "https://circleci.com/api/v2/project/gh/${owner}/${repo}/pipeline?branch=$(git branch --show-current)" |
+    jq -r '.items|sort_by(.number)|reverse[0]|[.id, .number]|@tsv'
+)"
+
+
+workflow_ids=$(
+  curl -sH "${AUTH_HEADER}" \
+    "https://circleci.com/api/v2/pipeline/${pipeline_id}/workflow" |
+    jq -r '.items|group_by(.name)|map(sort_by(.stopped_at)|reverse[0])|.[]|[.id, .name]|@tsv' |
+    fzf --select-1 --multi |
+    cut -f1
+)
+
+echo "${workflow_ids}" | while read id; do
+  open "https://app.circleci.com/pipelines/github/${owner}/${repo}/${pipline_number}/workflows/${id}"
+done
+
