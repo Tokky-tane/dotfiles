@@ -56,6 +56,7 @@
   show = delta
   blame = delta
   branch = less --quit-if-one-screen
+  grep = less --quit-if-one-screen
 
 [interactive]
   diffFilter = delta --color-only --features=interactive
