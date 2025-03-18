@@ -8,3 +8,4 @@ cut -d '' -f
 xargs -n1 -I{}
 jq -cr '.'
 curl -sLI
+xargs dirname | sort -u
