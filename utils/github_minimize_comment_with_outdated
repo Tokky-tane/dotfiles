@@ -1,0 +1,62 @@
+#!/bin/bash
+
+while getopts "u:r:o:n:" OPT; do
+  case $OPT in
+    u)
+      user=$OPTARG
+      ;;
+    r)
+      repo_name=$OPTARG
+      ;;
+    o)
+      owner=$OPTARG
+      ;;
+    n)
+      pr_number=$OPTARG
+      ;;
+  esac
+  shift
+done
+
+[ -z "$repo_name" ] && repo_name=$(gh repo view --json 'name' --jq '.name')
+[ -z "$owner" ] && owner=$(gh repo view --json 'owner' --jq '.owner.login')
+[ -z "$pr_number" ] && pr_number=$(gh pr view --json number --jq .number)
+
+gh api graphql -F owner=$owner -F repo_name=$repo_name -F pr_number=$pr_number -f query='
+query($owner: String!, $repo_name: String!, $pr_number: Int!) {
+    repository(owner: $owner, name: $repo_name) {
+      pullRequest(number: $pr_number) {
+        comments(first: 50) {
+          nodes {
+            author {
+              login
+            }
+            createdAt
+            id
+            isMinimized
+            body
+          }
+        }
+      }
+    }
+  }' |
+  jq -rc '.data.repository.pullRequest.comments.nodes[]|
+      select(.isMinimized == false)' |
+  jq -src 'sort_by(.createdAt)[]|
+      [.id, .author.login, .createdAt, .body[:170]]|
+      @tsv' |
+  grep "$user" |
+  sort |
+  fzf --multi |
+  while read -r id created_at body; do
+    gh api graphql -F id=$id -f 'query=
+    mutation($id: ID!) {
+      minimizeComment(input: {subjectId: $id, classifier: OUTDATED}) {
+        minimizedComment {
+          isMinimized
+          minimizedReason
+        }
+      }
+    }
+    ' &
+  done
