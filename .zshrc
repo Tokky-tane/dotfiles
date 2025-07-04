@@ -20,7 +20,7 @@ setopt SHARE_HISTORY
 
 export LESS='--RAW-CONTROL-CHARS --shift 3 --LONG-PROMPT'
 # -, _, /, =, . を削除する
-export WORDCHARS=$(echo $WORDCHARS | sed 's/[\-_\/=\.]//g')
+export WORDCHARS=$(echo $WORDCHARS | sed -E 's#[-_/=\.]##g')
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
