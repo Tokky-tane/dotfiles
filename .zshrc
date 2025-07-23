@@ -131,7 +131,7 @@ alias gsa='git sa'
 
 alias dcb='docker compose build'
 alias dce='docker compose exec'
-alias dcr='docker compose run'
+alias dcr='docker compose run --rm --remove-orphans'
 alias dcu='docker compose up'
 alias dcub='docker compose up --build'
 
