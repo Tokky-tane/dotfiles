@@ -151,7 +151,7 @@ alias gpc='github_pull_request_checkout'
 alias ghb='gh browse'
 alias ghpc='gh pr create -w'
 
-alias git-pick-commit='fzf --reverse --preview "git show {1} --color=always" --height 50% | awk '\''{print $1}'\'
+alias git-pick-commit='fzf --reverse --preview "git show {1} --color=always | delta" --height 50% | awk '\''{print $1}'\'
 alias git-pick-from-log='git log --oneline | git-pick-commit'
 alias git-pick-from-reflog='git reflog | git-pick-commit'
 
