@@ -1,0 +1,64 @@
+#!/bin/bash
+
+AUTH_HEADER="Circle-Token: ${CIRCLE_TOKEN}"
+
+read -r owner repo <<<"$(
+  gh repo view --json 'owner,name' |
+    jq -rc '[.owner.login, .name]|@tsv'
+)"
+
+pipeline_id=$(
+  curl -sH "${AUTH_HEADER}" \
+    "https://circleci.com/api/v2/project/gh/${owner}/${repo}/pipeline?branch=$(git branch --show-current)" |
+    jq -r '.items|sort_by(.number)|reverse[0].id'
+)
+
+workflow_id=$(
+  curl -sH "${AUTH_HEADER}" \
+    "https://circleci.com/api/v2/pipeline/${pipeline_id}/workflow" |
+    jq -r '.items|group_by(.name)|map(sort_by(.stopped_at)|reverse[0])|.[]|[.id, .name]|@tsv' |
+    fzf --select-1 |
+    cut -f1
+)
+job_numbers=$(
+  curl -sH "${AUTH_HEADER}" \
+    "https://circleci.com/api/v2/workflow/${workflow_id}/job" |
+    jq -r '.items[]|[.job_number, .name]|@tsv' |
+    rg -iv '(checkout|fmt)' |
+    fzf --select-1 --multi |
+    cut -f1
+)
+
+echo "${job_numbers}" | while read job_number; do
+  job_steps="$(
+    curl -sH "${AUTH_HEADER}" \
+      "https://circleci.com/api/v1.1/project/github/${owner}/${repo}/${job_number}" |
+      jq '.steps|map({name: .name, actions: .actions|map({output_url: .output_url})})'
+  )"
+  job_name="$(
+    echo "${job_steps}" |
+      jq -r '.[]|.name' |
+      grep 'terraform' |
+      grep -v 'install' |
+      grep -v 'options' |
+      fzf --select-1
+  )"
+  job_output_urls="$(
+    echo "${job_steps}" |
+      jq -r '.[]|select(.name == "'"${job_name}"'")|.actions[]|.output_url'
+  )"
+  echo "${job_output_urls}" | while read l; do
+    f=$(mktemp)
+    ansi_removed=+"$(curl -s $l |
+      jq -r '.[0].message' |
+      sed -e 's/\x1b\[[0-9;]*m//g')"
+    plan_results="$(
+      echo "${ansi_removed}" |
+        gsed -n '/Terraform will perform the following actions/,/Note: You didn'\''t use the -out option to save this plan/p')"
+    if [ -z "${plan_results}" ]; then
+      echo "${ansi_removed}"
+    else
+      echo "${plan_results}"
+    fi > "${f}"
+  done
+done
