@@ -14,5 +14,5 @@ aws ecs list-clusters |
     aws ecs list-services --cluster "${cluster}" |
       jq -r '.serviceArns[]' |
       fzf -m --select-1 |
-      xargs -n1 -I{} aws ecs update-service --cluster "${cluster}" --service {} --desired-count "${desired_count}"
+      xargs -n1 -I{} aws ecs update-service --cluster "${cluster}" --service {} --desired-count "${desired_count}" --force-new-deployment
   done
