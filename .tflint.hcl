@@ -23,11 +23,11 @@ rule "terraform_documented_variables" {
 }
 
 rule "terraform_module_pinned_source" {
-  enabled = false
+  enabled = true
 }
 
 rule "terraform_module_version" {
-  enabled = false
+  enabled = true
 }
 
 rule "terraform_naming_convention" {
