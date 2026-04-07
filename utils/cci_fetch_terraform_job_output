@@ -2,13 +2,14 @@
 
 AUTH_HEADER="Circle-Token: ${CIRCLE_TOKEN}"
 
-owner=$1
-repo=$2
-branch=$3
+read -r owner repo <<<"$(
+  gh repo view --json 'owner,name' |
+    jq -rc '[.owner.login, .name]|@tsv'
+)"
 
 latest_pipeline_id=$(
   curl -sH "${AUTH_HEADER}" \
-    "https://circleci.com/api/v2/project/gh/${owner}/${repo}/pipeline?branch=${branch}" |
+    "https://circleci.com/api/v2/project/gh/${owner}/${repo}/pipeline?branch=$(git branch --show-current)" |
     jq -r '.items|sort_by(.number)|reverse[0].id'
 )
 
