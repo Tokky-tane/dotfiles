@@ -1,9 +1,7 @@
 fpath=(~/.docker/completions $fpath)
-autoload -Uz compinit && compinit
+autoload -Uz compinit
 autoload -Uz promptinit && promptinit
-autoload -U +X bashcompinit && bashcompinit
-
-complete -C '/usr/local/bin/aws_completer' aws # https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-configure-completion.html
+autoload -U +X bashcompinit
 
 eval "$(zoxide init zsh)"
 
@@ -194,4 +192,7 @@ export BAT_THEME=Coldark-Dark
 
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 eval "$(mise activate zsh)"
+compinit
+bashcompinit
+complete -C '/usr/local/bin/aws_completer' aws # https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-configure-completion.html
 
