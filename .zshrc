@@ -1,5 +1,4 @@
 fpath=(~/.docker/completions $fpath)
-# https://github.com/asdf-vm/asdf/issues/266
 autoload -Uz compinit && compinit
 autoload -Uz promptinit && promptinit
 autoload -U +X bashcompinit && bashcompinit
@@ -23,8 +22,6 @@ export LESS='--RAW-CONTROL-CHARS --shift 3 --LONG-PROMPT'
 export WORDCHARS=$(echo $WORDCHARS | sed -E 's#[-_/=\.]##g')
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-
-type rbenv >/dev/null 2>&1 && eval "$(rbenv init -)"
 
 autoload -Uz vcs_info
 precmd_vcs_info() { vcs_info }
@@ -52,7 +49,6 @@ path_list=(
   "$HOME/.serverless/bin"
   "$HOME/bin"
   "$HOME/go/bin"
-  "$HOME/.nodenv/bin"
   "/opt/WebDriver/bin"
   "/opt/homebrew/opt/postgresql@16/bin"
 )
@@ -61,8 +57,6 @@ for additional_path in "${path_list[@]}"; do
     PATH="$additional_path:$PATH"
   fi
 done
-
-eval "$(nodenv init -)"
 
 # 現在の入力から始まるコマンドの履歴を表示するようにする
 [[ -n "${key[PageUp]}" ]] && bindkey "${key[PageUp]}" history-beginning-search-backward
@@ -198,3 +192,5 @@ export BAT_THEME=Coldark-Dark
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local
 
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+eval "$(mise activate zsh)"
+
