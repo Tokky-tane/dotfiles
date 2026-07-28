@@ -1,5 +1,4 @@
 #!/bin/bash
 
 aws ssm get-parameters-by-path --recursive --path ${1:-/} --with-decryption |
-  jq -rc '.Parameters[]|[.Name,.Value]|@sh' |
-  sort
+  jq -rc '.Parameters|sort_by(.Name)[]|{Name, Value}'
