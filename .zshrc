@@ -44,6 +44,7 @@ add-zsh-hook chpwd iterm_tab_title
 path_list=(
   "/usr/local/mysql/bin"
   "/usr/local/sbin"
+  "$HOME/.local/bin"
   "$HOME/.rd/bin"
   "$HOME/.serverless/bin"
   "$HOME/bin"
