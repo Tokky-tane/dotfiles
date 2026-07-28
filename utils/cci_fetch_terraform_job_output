@@ -60,5 +60,6 @@ echo "${job_numbers}" | while read job_number; do
     else
       echo "${plan_results}"
     fi > "${f}"
+    echo "${f}"
   done
 done
