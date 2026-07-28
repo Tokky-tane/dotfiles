@@ -8,7 +8,7 @@
   b     = branch
   ba    = branch --all
   bm    = branch --merged
-  bcl   = !git branch --delete $(git branch --merged | grep -v '*')
+  bcl   = !git branch --delete $(git branch --merged | grep -v -e '*' -e '+') || git worktree remove $(git branch --merged | grep '+')
   co    = commit
   cof   = !git commit --fixup $(git-pick-from-log)
   com   = commit --message
