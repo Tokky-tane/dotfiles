@@ -13,3 +13,58 @@
 "~/.zshrc" = { source = ".zshrc" }
 "~/.config/mise/config.toml" = { source = ".config/mise/config.toml" }
 "~/bin" = { source = "utils", mode = "symlink-each" }
+
+# macOS の設定。標準値から変えているものだけを書く
+# Dock と Finder は再起動するまで反映されない（killall Dock Finder）
+[bootstrap.macos.dock]
+autohide = true
+tilesize = 67
+show_recents = false
+mru_spaces = false
+apps = [
+  "/System/Applications/Apps.app",
+  "/Applications/Slack.app",
+  "/Applications/Zed.app",
+  "/Applications/iTerm.app",
+  "/Applications/Google Chrome.app",
+]
+
+[bootstrap.macos.finder]
+show_status_bar = true
+preferred_view_style = "list"
+
+[bootstrap.macos.keyboard]
+key_repeat = 2
+initial_key_repeat = 15
+automatic_capitalization = false
+automatic_spelling_correction = false
+
+[bootstrap.macos.defaults.NSGlobalDomain]
+AppleShowAllExtensions = true
+NSAutomaticPeriodSubstitutionEnabled = false
+"com.apple.trackpad.scaling" = 1.5
+
+# ホットコーナー: 左上=Mission Control、右上=通知センター、右下=画面をロック
+[bootstrap.macos.defaults."com.apple.dock"]
+"wvous-tl-corner" = 2
+"wvous-tl-modifier" = 0
+"wvous-tr-corner" = 12
+"wvous-tr-modifier" = 0
+"wvous-br-corner" = 13
+"wvous-br-modifier" = 0
+"expose-group-apps" = true
+
+[bootstrap.macos.defaults."com.apple.finder"]
+# 新規ウインドウでホームフォルダを開く
+NewWindowTarget = "PfHm"
+
+[bootstrap.macos.defaults."com.apple.menuextra.clock"]
+ShowSeconds = true
+
+[bootstrap.macos.defaults."com.apple.WindowManager"]
+# 壁紙クリックでデスクトップを表示しない
+EnableStandardClickToShowDesktop = false
+
+[bootstrap.macos.defaults."com.apple.spaces"]
+# ディスプレイごとに個別の操作スペースを使わない
+"spans-displays" = true
