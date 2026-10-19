@@ -1,0 +1,15 @@
+# 新しいマシンでのセットアップ
+#   git clone https://github.com/Tokky-tane/dotfiles.git ~/repos/Tokky-tane/dotfiles
+#   mise trust ~/repos/Tokky-tane/dotfiles
+#   mise -C ~/repos/Tokky-tane/dotfiles bootstrap
+
+[dotfiles]
+"~/.gitconfig" = { source = ".gitconfig" }
+"~/.terraformrc" = { source = ".terraformrc" }
+"~/.tflint.hcl" = { source = ".tflint.hcl" }
+"~/.vimrc" = { source = ".vimrc" }
+"~/.zprofile" = { source = ".zprofile" }
+"~/.zsh_snippet" = { source = ".zsh_snippet" }
+"~/.zshrc" = { source = ".zshrc" }
+"~/.config/mise/config.toml" = { source = ".config/mise/config.toml" }
+"~/bin" = { source = "utils", mode = "symlink-each" }
