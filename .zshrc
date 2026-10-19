@@ -166,7 +166,6 @@ export TF_CLI_ARGS_plan='-parallelism=15'
 export TF_CLI_ARGS_apply='-parallelism=15'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-[ -f /usr/local/etc/profile.d/z.sh ] && source /usr/local/etc/profile.d/z.sh
 
 if type fd > /dev/null 2>&1; then;
   _fzf_compgen_path() {
