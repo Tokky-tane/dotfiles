@@ -61,7 +61,7 @@ add-zsh-hook chpwd iterm_tab_title
 # zoxide など compdef の有無を見て補完を登録するツールがあるため、ツール初期化より前に置く
 fpath=(~/.docker/completions $fpath)
 autoload -Uz compinit
-autoload -U +X bashcompinit
+autoload -Uz bashcompinit
 compinit
 bashcompinit
 complete -C '/usr/local/bin/aws_completer' aws # https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-configure-completion.html
