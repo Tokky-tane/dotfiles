@@ -181,11 +181,10 @@ bindkey '^o' show_snippets
 
 export BAT_THEME=Coldark-Dark
 
-[ -f ~/.zshrc.local ] && source ~/.zshrc.local
-
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 eval "$(mise activate zsh)"
 compinit
 bashcompinit
 complete -C '/usr/local/bin/aws_completer' aws # https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-configure-completion.html
 
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local
