@@ -165,8 +165,6 @@ fi
 export TF_CLI_ARGS_plan='-parallelism=15'
 export TF_CLI_ARGS_apply='-parallelism=15'
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
 if type fd > /dev/null 2>&1; then;
   _fzf_compgen_path() {
     fd --hidden --follow --exclude ".git" --exclude ".terraform" . "$1"
