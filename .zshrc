@@ -1,6 +1,5 @@
 fpath=(~/.docker/completions $fpath)
 autoload -Uz compinit
-autoload -Uz promptinit && promptinit
 autoload -U +X bashcompinit
 
 eval "$(zoxide init zsh)"
@@ -38,6 +37,7 @@ DISABLE_AUTO_TITLE="true"
 iterm_tab_title() {
   echo -ne "\e]0;${PWD#*${USER}}\a"
 }
+autoload -Uz add-zsh-hook
 add-zsh-hook chpwd iterm_tab_title
 
 path_list=(
