@@ -1,2 +1,25 @@
+[tools]
+bat = "latest"
+circleci = "latest"
+conftest = "latest"
+dasel = "latest"
+delta = "latest"
+duckdb = "latest"
+fd = "latest"
+fzf = "latest"
+gh = "latest"
+git-lfs = "latest"
+jq = "latest"
+opa = "latest"
+regal = "latest"
+ripgrep = "latest"
+rtk = "latest"
+shellcheck = "latest"
+shfmt = "latest"
+terraform-docs = "latest"
+tflint = "latest"
+yq = "latest"
+zoxide = "latest"
+
 [settings]
 idiomatic_version_file_enable_tools = ["terraform","ruby"]
