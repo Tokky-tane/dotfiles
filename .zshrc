@@ -18,7 +18,6 @@ export BAT_THEME=Coldark-Dark
 path_list=(
   "/usr/local/mysql/bin"
   "/usr/local/sbin"
-  "$HOME/.local/bin"
   "$HOME/.rd/bin"
   "$HOME/.serverless/bin"
   "$HOME/bin"
@@ -67,6 +66,9 @@ bashcompinit
 complete -C '/usr/local/bin/aws_completer' aws # https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-configure-completion.html
 
 # ツール初期化
+# zoxide・fzf・fd は mise で入れているため、mise を最初に有効にする
+eval "$(mise activate zsh)"
+
 eval "$(zoxide init zsh)"
 
 if type fd > /dev/null 2>&1; then;
@@ -80,7 +82,6 @@ fi
 source <(fzf --zsh)
 
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-eval "$(mise activate zsh)"
 
 # キーバインド
 # 現在の入力から始まるコマンドの履歴を表示するようにする
