@@ -57,6 +57,15 @@ iterm_tab_title() {
 autoload -Uz add-zsh-hook
 add-zsh-hook chpwd iterm_tab_title
 
+# 補完
+# zoxide など compdef の有無を見て補完を登録するツールがあるため、ツール初期化より前に置く
+fpath=(~/.docker/completions $fpath)
+autoload -Uz compinit
+autoload -U +X bashcompinit
+compinit
+bashcompinit
+complete -C '/usr/local/bin/aws_completer' aws # https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-configure-completion.html
+
 # ツール初期化
 eval "$(zoxide init zsh)"
 
@@ -188,14 +197,6 @@ alias cle='circleci local execute --job'
 alias zshrc='vim ~/.zshrc && source ~/.zshrc'
 alias gitconfig='vim ~/.gitconfig'
 alias d='delta_diff'
-
-# 補完
-fpath=(~/.docker/completions $fpath)
-autoload -Uz compinit
-autoload -U +X bashcompinit
-compinit
-bashcompinit
-complete -C '/usr/local/bin/aws_completer' aws # https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-configure-completion.html
 
 # マシン固有の設定
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local
