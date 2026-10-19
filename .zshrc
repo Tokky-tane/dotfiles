@@ -10,8 +10,6 @@ export HISTSIZE=500000
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_REDUCE_BLANKS
 setopt SHARE_HISTORY
-# setopt prompt_cr
-# setopt prompt_sp
 
 export LESS='--RAW-CONTROL-CHARS --shift 3 --LONG-PROMPT'
 # -, _, /, =, . を削除する
@@ -28,12 +26,10 @@ zstyle ':vcs_info:git:*' formats '( %F{green}%b%f )-(%c%u)'
 zstyle ':vcs_info:git:*' check-for-changes true
 RPROMPT=\$vcs_info_msg_0_
 
-# set_prompt fire red magenta blue white white magenta
 PROMPT='%?>%K{blue}%F{white}%D{%H:%M} %B%~%b%f%k '
 
 export AWS_REGION=ap-northeast-1
 
-DISABLE_AUTO_TITLE="true"
 iterm_tab_title() {
   echo -ne "\e]0;${PWD#*${USER}}\a"
 }
