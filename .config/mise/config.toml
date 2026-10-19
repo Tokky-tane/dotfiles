@@ -21,5 +21,10 @@ tflint = "latest"
 yq = "latest"
 zoxide = "latest"
 
+deno = "latest"
+go = "latest"
+python = "latest"
+rust = "latest"
+
 [settings]
 idiomatic_version_file_enable_tools = ["terraform","ruby"]
