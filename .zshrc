@@ -10,7 +10,6 @@ export SAVEHIST=500000
 export HISTSIZE=500000
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_REDUCE_BLANKS
-setopt HIST_IGNORE_DUPS # 重複した履歴を無視
 setopt SHARE_HISTORY
 # setopt prompt_cr
 # setopt prompt_sp
