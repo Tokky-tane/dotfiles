@@ -1,41 +1,20 @@
-fpath=(~/.docker/completions $fpath)
-autoload -Uz compinit
-autoload -U +X bashcompinit
-
-eval "$(zoxide init zsh)"
-
+# 環境変数
 export HISTFILE=$HOME/.zsh_history
 export SAVEHIST=500000
 export HISTSIZE=500000
-setopt HIST_IGNORE_ALL_DUPS
-setopt HIST_REDUCE_BLANKS
-setopt SHARE_HISTORY
 
 export LESS='--RAW-CONTROL-CHARS --shift 3 --LONG-PROMPT'
 # -, _, /, =, . を削除する
 export WORDCHARS=$(echo $WORDCHARS | sed -E 's#[-_/=\.]##g')
 
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-
-autoload -Uz vcs_info
-precmd_vcs_info() { vcs_info }
-precmd_functions+=( precmd_vcs_info )
-setopt prompt_subst
-zstyle ':vcs_info:*' enable git
-zstyle ':vcs_info:git:*' formats '( %F{green}%b%f )-(%c%u)'
-zstyle ':vcs_info:git:*' check-for-changes true
-RPROMPT=\$vcs_info_msg_0_
-
-PROMPT='%?>%K{blue}%F{white}%D{%H:%M} %B%~%b%f%k '
-
 export AWS_REGION=ap-northeast-1
 
-iterm_tab_title() {
-  echo -ne "\e]0;${PWD#*${USER}}\a"
-}
-autoload -Uz add-zsh-hook
-add-zsh-hook chpwd iterm_tab_title
+export TF_CLI_ARGS_plan='-parallelism=15'
+export TF_CLI_ARGS_apply='-parallelism=15'
 
+export BAT_THEME=Coldark-Dark
+
+# PATH
 path_list=(
   "/usr/local/mysql/bin"
   "/usr/local/sbin"
@@ -53,9 +32,74 @@ for additional_path in "${path_list[@]}"; do
   fi
 done
 
+# 履歴
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_REDUCE_BLANKS
+setopt SHARE_HISTORY
+
+# プロンプト・端末表示
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+autoload -Uz vcs_info
+precmd_vcs_info() { vcs_info }
+precmd_functions+=( precmd_vcs_info )
+setopt prompt_subst
+zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:git:*' formats '( %F{green}%b%f )-(%c%u)'
+zstyle ':vcs_info:git:*' check-for-changes true
+RPROMPT=\$vcs_info_msg_0_
+
+PROMPT='%?>%K{blue}%F{white}%D{%H:%M} %B%~%b%f%k '
+
+iterm_tab_title() {
+  echo -ne "\e]0;${PWD#*${USER}}\a"
+}
+autoload -Uz add-zsh-hook
+add-zsh-hook chpwd iterm_tab_title
+
+# ツール初期化
+eval "$(zoxide init zsh)"
+
+if type fd > /dev/null 2>&1; then;
+  _fzf_compgen_path() {
+    fd --hidden --follow --exclude ".git" --exclude ".terraform" . "$1"
+  }
+  _fzf_compgen_dir() {
+    fd --type d --hidden --follow --exclude ".git" --exclude ".terraform" . "$1"
+  }
+fi
+source <(fzf --zsh)
+
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+eval "$(mise activate zsh)"
+
+# キーバインド
 # 現在の入力から始まるコマンドの履歴を表示するようにする
 [[ -n "${key[PageUp]}" ]] && bindkey "${key[PageUp]}" history-beginning-search-backward
 [[ -n "${key[PageDown]}" ]] && bindkey "${key[PageDown]}" history-beginning-search-forward
+
+show_snippets() {
+    local snippets=$(cat ~/.zsh_snippet | fzf | cut -d':' -f2-)
+    LBUFFER="${LBUFFER}${snippets}"
+    zle reset-prompt
+}
+zle -N show_snippets
+bindkey '^o' show_snippets
+
+# 関数
+if ! which watch > /dev/null; then
+  function watch() {
+    zparseopts -D -E -a optionArray -A optionPair n:
+    if [[ -n "${optionArray[(i)-n]}" ]]; then
+      sleep_n="${optionPair[-n]}"
+    fi
+    while true; do
+      $@
+      sleep "${sleep_n:-1}"
+      clear
+    done
+  }
+fi
 
 # alias
 # terraform
@@ -76,14 +120,6 @@ alias tfsr='terraform state rm'
 alias tfsp='terraform state pull'
 alias tfsm='terraform state mv'
 alias tfss='terraform state show'
-
-# circleci
-alias ccv='circleci config validate'
-alias cle='circleci local execute --job'
-
-# util
-alias zshrc='vim ~/.zshrc && source ~/.zshrc'
-alias gitconfig='vim ~/.gitconfig'
 
 # git
 alias g='git'
@@ -118,73 +154,48 @@ alias gssk='git ssk'
 alias gsp='git sp'
 alias gsa='git sa'
 
-alias dcb='docker compose build'
-alias dce='docker compose exec'
-alias dcr='docker compose run --rm --remove-orphans'
-alias dcu='docker compose up'
-alias dcub='docker compose up --build'
-
 alias cdg='cd $(git rev-parse --show-toplevel)'
 
-alias d='delta_diff'
+alias git-pick-commit='fzf --reverse --preview "git show {1} --color=always | delta" --height 50% | awk '\''{print $1}'\'
+alias git-pick-from-log='git log --oneline | git-pick-commit'
+alias git-pick-from-reflog='git reflog | git-pick-commit'
 
-alias al='source aws_sso_login'
-alias ald='aws_sso_login_default'
-alias aa='aws_sso_ruby auth'
-alias aap='aws_sso_ruby auth -p'
-
-
+# GitHub
 alias gpr='github_pull_request_review'
 alias gpa='github_pull_request_approve'
 alias gpc='github_pull_request_checkout'
 alias ghb='gh browse'
 alias ghpc='gh pr create -w'
 
-alias git-pick-commit='fzf --reverse --preview "git show {1} --color=always | delta" --height 50% | awk '\''{print $1}'\'
-alias git-pick-from-log='git log --oneline | git-pick-commit'
-alias git-pick-from-reflog='git reflog | git-pick-commit'
+# docker compose
+alias dcb='docker compose build'
+alias dce='docker compose exec'
+alias dcr='docker compose run --rm --remove-orphans'
+alias dcu='docker compose up'
+alias dcub='docker compose up --build'
 
-if ! which watch > /dev/null; then
-  function watch() {
-    zparseopts -D -E -a optionArray -A optionPair n:
-    if [[ -n "${optionArray[(i)-n]}" ]]; then
-      sleep_n="${optionPair[-n]}"
-    fi
-    while true; do
-      $@
-      sleep "${sleep_n:-1}"
-      clear
-    done
-  }
-fi
+# AWS
+alias al='source aws_sso_login'
+alias ald='aws_sso_login_default'
+alias aa='aws_sso_ruby auth'
+alias aap='aws_sso_ruby auth -p'
 
-export TF_CLI_ARGS_plan='-parallelism=15'
-export TF_CLI_ARGS_apply='-parallelism=15'
+# circleci
+alias ccv='circleci config validate'
+alias cle='circleci local execute --job'
 
-if type fd > /dev/null 2>&1; then;
-  _fzf_compgen_path() {
-    fd --hidden --follow --exclude ".git" --exclude ".terraform" . "$1"
-  }
-  _fzf_compgen_dir() {
-    fd --type d --hidden --follow --exclude ".git" --exclude ".terraform" . "$1"
-  }
-fi
-source <(fzf --zsh)
+# util
+alias zshrc='vim ~/.zshrc && source ~/.zshrc'
+alias gitconfig='vim ~/.gitconfig'
+alias d='delta_diff'
 
-show_snippets() {
-    local snippets=$(cat ~/.zsh_snippet | fzf | cut -d':' -f2-)
-    LBUFFER="${LBUFFER}${snippets}"
-    zle reset-prompt
-}
-zle -N show_snippets
-bindkey '^o' show_snippets
-
-export BAT_THEME=Coldark-Dark
-
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-eval "$(mise activate zsh)"
+# 補完
+fpath=(~/.docker/completions $fpath)
+autoload -Uz compinit
+autoload -U +X bashcompinit
 compinit
 bashcompinit
 complete -C '/usr/local/bin/aws_completer' aws # https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-configure-completion.html
 
+# マシン固有の設定
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local
