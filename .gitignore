@@ -1,0 +1,2 @@
+# Karabiner-Elements が設定変更のたびに書き出すバックアップ
+.config/karabiner/automatic_backups/

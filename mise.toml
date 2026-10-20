@@ -12,6 +12,14 @@
 "~/.zsh_snippet" = { source = ".zsh_snippet" }
 "~/.zshrc" = { source = ".zshrc" }
 "~/.config/mise/config.toml" = { source = ".config/mise/config.toml" }
+"~/.aerospace.toml" = { source = ".aerospace.toml" }
+# Karabiner-Elements は karabiner.json を置き換えて保存するため、ディレクトリごとリンクする
+"~/.config/karabiner" = { source = ".config/karabiner" }
+# settings.json はトークンを含むため管理しない
+"~/.config/zed/keymap.json" = { source = ".config/zed/keymap.json" }
+"~/.config/git/ignore" = { source = ".config/git/ignore" }
+# hosts.yml は認証情報を含むため管理しない
+"~/.config/gh/config.yml" = { source = ".config/gh/config.yml" }
 "~/bin" = { source = "utils", mode = "symlink-each" }
 
 # macOS の設定。標準値から変えているものだけを書く
